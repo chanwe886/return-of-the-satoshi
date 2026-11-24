@@ -11,6 +11,32 @@
   var COOLDOWN_MS = 20000;
   var COOLDOWN_KEY = "rot-satoshi-last-sign-v1";
   var LOCAL_ROLL_KEY = "rot-satoshi-my-signs-v1";
+  var LANG = (document.documentElement.lang || "").toLowerCase().indexOf("zh") === 0 ? "zh" : "en";
+  var COPY = {
+    zh: {
+      connecting: "正在连接节点…",
+      empty: "创世块已写出。联署从你开始。",
+      first: "第一份公开签名已就位。大厅里开始有掌声了。",
+      many: function (n) { return "已有 " + n + " 份签名落在这张公开计数上。不上链，但气氛在。"; },
+      toast: "签名成功",
+      button: "签名，支持回归",
+      buttonDone: "签名成功",
+      success: "大厅已经记下你了。中本聪大概还是看不到，但我们看到了。",
+      already: "这一票已经收下了。稍等片刻再签，大厅还记得你。"
+    },
+    en: {
+      connecting: "Connecting to the nodes…",
+      empty: "The genesis block is written. The petition starts with you.",
+      first: "The first public signature is in. The hall is starting to clap.",
+      many: function (n) { return n + " signatures are on this public counter. Nothing's on-chain, but the vibe is."; },
+      toast: "Signed",
+      button: "Sign, bring him back",
+      buttonDone: "Signed",
+      success: "The hall has you down. Satoshi probably still can't see it. We can.",
+      already: "Already got this one. Give it a moment — the hall still remembers you."
+    }
+  };
+  var T = COPY[LANG] || COPY.en;
 
   var form = document.getElementById("sign-form");
   var signBtn = document.getElementById("sign-btn");
@@ -32,13 +58,13 @@
     var n = totalOf(map);
     counterNum.textContent = String(n);
     if (!loaded && n === 0) {
-      counterHint.textContent = "正在连接节点…";
+      counterHint.textContent = T.connecting;
     } else if (n === 0) {
-      counterHint.textContent = "创世块已写出。联署从你开始。";
+      counterHint.textContent = T.empty;
     } else if (n === 1) {
-      counterHint.textContent = "第一份公开签名已就位。大厅里开始有掌声了。";
+      counterHint.textContent = T.first;
     } else {
-      counterHint.textContent = "已有 " + n + " 份签名落在这张公开计数上。不上链，但气氛在。";
+      counterHint.textContent = T.many(n);
     }
     var max = Math.max(1, n);
     document.querySelectorAll(".role-card").forEach(function (card) {
@@ -50,16 +76,16 @@
   }
 
   function showSuccess(detailText) {
-    successDetail.textContent = detailText || "大厅已经记下你了。中本聪大概还是看不到，但我们看到了。";
+    successDetail.textContent = detailText || T.success;
     successState.hidden = false;
     toast.hidden = false;
-    toast.textContent = "签名成功";
+    toast.textContent = T.toast;
     if (toastTimer) clearTimeout(toastTimer);
     toastTimer = setTimeout(function () { toast.hidden = true; }, 3200);
     signBtn.classList.add("is-done");
-    signBtn.textContent = "签名成功";
+    signBtn.textContent = T.buttonDone;
     setTimeout(function () {
-      signBtn.textContent = "签名，支持回归";
+      signBtn.textContent = T.button;
       signBtn.classList.remove("is-done");
     }, 1600);
     successState.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -153,7 +179,7 @@
 
     // Always show success immediately on click. Never look like a failure.
     if (cooling) {
-      showSuccess("这一票已经收下了。稍等片刻再签，大厅还记得你。");
+      showSuccess(T.already);
       return;
     }
 
@@ -162,12 +188,11 @@
     render(counts);
     writeCooldown();
     rememberLocal(alias, role);
-    showSuccess("大厅已经记下你了。中本聪大概还是看不到，但我们看到了。");
+    showSuccess(T.success);
 
     incrementRemote(role).then(function () {
       return loadCounts();
     }).catch(function () {
-      // Keep the optimistic success on screen; retry quietly once.
       setTimeout(function () {
         incrementRemote(role).then(function () { return loadCounts(); }).catch(function () {});
       }, 2000);
@@ -177,7 +202,7 @@
   render(counts);
   loadCounts().catch(function () {
     loaded = true;
-    counterHint.textContent = "创世块已写出。联署从你开始。";
+    counterHint.textContent = T.empty;
     render(counts);
   });
 })();

@@ -11,6 +11,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
+  <link rel="alternate" hreflang="zh-CN" href="https://chanwe886.github.io/return-of-the-satoshi/" />
+  <link rel="alternate" hreflang="en" href="https://chanwe886.github.io/return-of-the-satoshi/en/" />
+  <link rel="alternate" hreflang="x-default" href="https://chanwe886.github.io/return-of-the-satoshi/" />
 </head>
 <body>
   <div class="grain" aria-hidden="true"></div>
@@ -20,11 +23,18 @@
       <span class="wordmark-en">RETURN OF THE SATOSHI</span>
       <span class="wordmark-zh">中本聪回归 BTC 网络</span>
     </a>
-    <nav class="nav">
-      <a href="#film">短片</a>
-      <a href="#letter">公开信</a>
-      <a href="#sign">联署</a>
-    </nav>
+    <div class="header-tools">
+      <nav class="nav">
+        <a href="#film">短片</a>
+        <a href="#letter">公开信</a>
+        <a href="#sign">联署</a>
+      </nav>
+      <div class="lang-switch" aria-label="语言">
+        <span class="is-active">中文</span>
+        <span class="sep" aria-hidden="true">/</span>
+        <a href="en/" lang="en">English</a>
+      </div>
+    </div>
   </header>
 
   <main id="top">
@@ -142,6 +152,8 @@
         <p class="success-kicker">I'M BACK</p>
         <h3>签名成功</h3>
         <p id="success-detail">大厅已经记下你了。中本聪大概还是看不到，但我们看到了。</p>
+        <a class="success-follow" href="https://x.com/Layer2hunters" target="_blank" rel="noopener noreferrer">关注 @Layer2hunters</a>
+        <span class="success-follow-note">关注作者 X</span>
       </div>
 
       <div class="toast" id="toast" hidden role="status" aria-live="polite"></div>
